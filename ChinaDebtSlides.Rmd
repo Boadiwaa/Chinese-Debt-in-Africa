@@ -1,0 +1,185 @@
+---
+title: "Chinese Debt in Africa"
+author: "Boadiwaa"
+date: "5/20/2022"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,warning = FALSE, message = FALSE)
+library(readr)
+library(tidyverse)
+library(gtsummary)
+library(gsubfn)
+library(lubridate)
+library(ggplot2)
+library(ggthemes)
+library(ggridges)
+library(ggrepel)
+library(scales)
+library(gghighlight)
+library(knitr)
+
+knitr::read_chunk('cp.R')
+
+```
+
+![](C:/Users/pauli/OneDrive/Documents/GitHub/ChineseDebt/pexels-pixabay-47344.jpg){height=25%}
+```{css, echo=FALSE}
+h1, h2, h3 {
+  text-align: center;
+}
+```
+
+## Overview of Report {.tabset}
+
+### Description
+This is a brief descriptive report highlighting some finds from a quick analysis of a Kaggle Dataset on Chinese Debt in 50 countries from Africa. There were 1188 observations in the dataset with 7 variables named: "S.no","Project","Year",         "Lender","$ Allocation","Country" and "Invested On". 
+
+The major variable of interest was the Allocation (Debt) amount in dollars.
+
+<br>
+
+### **Contents of the Report:**
+
+- Biggest Lenders(allocation-wise)
+- Frequent Borrowers
+- How the 50 African countries fared in terms of borrowing
+- Most Invested Sectors
+- Each Country's Biggest Loan
+- Lending trend over the years
+- Top 5 borrowers vs. Bottom 5 borrowers
+- Spending Behavior of the Top 3 Borrowers
+- Zooming in on West Africa
+- Sneak Peek on Ghana
+
+<br>
+
+```{r }
+theme_gtsummary_compact()
+theme_set(theme_minimal())
+pal<-c("#661100", "#882255", "6699CC", "#888888",
+       "#332288", "#AA4499", "#44AA99", "#999933",
+       "#CC6677", "#DDCC77")
+cda<-read_csv("C:/Users/pauli/Desktop/archive/cd.csv")
+cda<-cda %>% mutate(Allocation=
+as.numeric(gsubfn('([A-Z]|[\\$,])', 
+                  list(B='e+9', M='e+6',"$"="", ","=""),
+                  cda$`$ Allocation`)), Year=as.Date(as.character(Year), format = "%Y"))
+
+```
+
+<br>
+
+## Biggest Lenders
+
+```{r }
+cda %>% group_by(Lender) %>% summarize(Total=sum(Allocation)) %>% 
+  arrange(desc(Total))%>% slice_head(n=10) %>% 
+  mutate(Amt=label_number_si(accuracy=0.1,prefix="$")(Total),
+         .keep="unused") %>% 
+kable(caption = "Table 1: Top 10 Lenders to Africa and Total Loan Amount", col.names = c("Chinese Lender", "Loan Amount"))
+
+```
+
+<br>
+
+## Top 10 Frequent Borrowers
+
+```{r }
+cda %>% group_by(Country) %>% summarize(Frequency=n()) %>% 
+  arrange(desc(Frequency))%>% mutate(Rank=seq(1,50))%>% relocate(Rank) %>% 
+  slice_head(n=10) %>%
+kable(caption = "Table 2: Africa's Fequent Borrowers", col.names = c("Rank", "Country", "Frequency of Loan Entries"))
+
+```
+
+<br>
+
+## The African Countries and Their Total Loan Amounts
+```{r }
+cda %>% group_by(Country) %>% summarize(Total=sum(Allocation)) %>% 
+  arrange(desc(Total))%>% 
+  mutate(Rank=seq(1,50), Amt=label_number_si(accuracy=0.1,prefix="$")(Total),.keep="unused") %>% relocate(Rank) %>% 
+kable(caption = "Table 3: African Countries and the Total Amount Borrowed", col.names = c("Rank","Country", "Loan Amount" ))
+
+```
+
+<br>
+
+## Most Invested Sectors
+```{r }
+cda %>% group_by(`Invested On`) %>% summarize(Total=sum(Allocation)) %>% 
+  arrange(desc(Total))%>% 
+  mutate(Rank=seq(1,21), Amt=label_number_si(accuracy=0.1,prefix="$")(Total),.keep="unused") %>% relocate(Rank) %>% 
+kable(caption = "Table 4: Sectors and The Amounts Invested", 
+      col.names = c("Rank","Sector", "Loan Amount"))
+
+``` 
+
+<br>
+
+## Each Country's Biggest Loan
+```{r}
+cda %>% arrange(desc(Allocation),Country) %>% 
+  select(Project: `Invested On`) %>% 
+  group_by(Country) %>% slice_head(n=1)%>% 
+kable(caption = "Table 5: Details on the Biggest Loan Per Country") 
+``` 
+
+<br>
+
+## Lending trend over the years
+
+```{r,a}
+
+``` 
+
+<br>
+
+## Top 5 vs Bottom 5 Borrowers
+The following two charts compares the borrowing patterns of the highest and lowest borrowers in Africa.The colored ribbon shows the 95% confidence interval and the colored line represents the linear regression model.
+
+Aside the noticeable difference in the amounts usually borrowed, there is a stark contrast in the frequency of borrowing. *(NB: Some outliers were taken out so the highest value on the y-axis does not indicate the highest amount borrowed.)
+
+```{r,b}
+
+```  
+
+<br>
+
+## Most Invested vs Least Invested Sector (by the top 3 borrowers)
+
+As shown below, Africa's top 3 borrowers spent the most on **Mining** and the least on the **Environment**. Quite ironic!
+```{r,c}
+
+``` 
+
+<br>
+
+## Spotlight on West Africa
+Here's an overview of how the 16 countries in West Africa fared:
+The first graph gives a sense of the usual borrowed amounts per country, and the 2nd shows the total amount borrowed over the period per country. 
+
+```{r,d}
+
+```  
+
+<br>
+
+## Ghana's Tale
+
+At the tail of this report, we take a quick peek at Ghana. We look at Ghana's investment patterns and see the sad story of its most invested area.  
+
+
+```{r,e}
+
+```  
+
+<br>
+
+**_THANK YOU FOR YOUR TIME!_**
