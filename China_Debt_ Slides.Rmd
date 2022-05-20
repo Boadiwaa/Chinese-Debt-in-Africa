@@ -1,0 +1,56 @@
+---
+title: "Chinese Debt in Africa"
+author: "Boadiwaa"
+date: "5/20/2022"
+output: ioslides_presentation
+  # html_document:
+  #   toc: true
+  #   toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,warning = FALSE, message = FALSE)
+library(readr)
+library(tidyverse)
+library(gtsummary)
+library(gsubfn)
+library(lubridate)
+library(ggplot2)
+library(ggthemes)
+library(ggridges)
+library(ggrepel)
+library(scales)
+library(gghighlight)
+
+knitr::read_chunk('cp.R')
+
+```
+
+## Overview of Report
+
+```{r }
+theme_gtsummary_compact()
+theme_set(theme_minimal())
+pal<-c("#661100", "#882255", "6699CC", "#888888",
+       "#332288", "#AA4499", "#44AA99", "#999933",
+       "#CC6677", "#DDCC77")
+cda<-read_csv("C:/Users/pauli/Desktop/archive/cd.csv")
+cda<-cda %>% mutate(Allocation=
+as.numeric(gsubfn('([A-Z]|[\\$,])', 
+                  list(B='e+9', M='e+6',"$"="", ","=""),
+                  cda$`$ Allocation`)), Year=as.Date(as.character(Year), format = "%Y"))
+
+cda %>% 
+  # mutate(`Allocation in $ `= label_number_si(accuracy=0.1,prefix="$")(Allocation)) %>% 
+  select(Lender,Country,`Invested On`, Allocation ) %>%  
+  tbl_summary(sort = list(everything() ~ "frequency")) %>%
+  bold_labels()  
+  
+```
+
+## Slide with Plot
+
+```{r a}
+
+```
+
