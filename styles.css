@@ -1,0 +1,12 @@
+slides > slide.title-slide {
+    background-image: url("C:/Users/pauli/OneDrive/Documents/GitHub/ChineseDebt/pexels-pixabay-47344.jpg");
+    background-size: 100% 100%;
+}
+slides > slide.title-slide hgroup h1 {  color: darkred;
+  font-size: 60px;
+  letter-spacing: 10;
+}
+
+slides > slide.title-slide p {
+  color: brown;
+}

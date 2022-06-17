@@ -101,7 +101,7 @@ cda %>% select(Year,Country,Allocation) %>%
   labs(title="Top 5 African Borrowers",
       subtitle =  "Chinese Debt Trap Dataset from Kaggle - 2022")
 
-
+## ---- be
 cda %>% select(Year,Country,Allocation) %>% 
   filter(Country %in% c("Liberia",
                         "Cape Verde","Seychelles","The Gambia",
@@ -211,7 +211,7 @@ gh<-cda %>% select(Year,`Invested On`,Country,Allocation) %>%
   scale_color_manual(values=pal)
 gh
 
-
+## ---- f
 gh+
 gghighlight(`Invested On` == 'Power', use_direct_label = F)+
 geom_text_repel(

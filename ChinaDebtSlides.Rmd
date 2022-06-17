@@ -2,11 +2,14 @@
 title: "Chinese Debt in Africa"
 author: "Boadiwaa"
 date: "5/20/2022"
-output: 
-  html_document:
-    toc: true
-    toc_float: true
-    
+output:
+    ioslides_presentation:
+      css: styles.css
+      # logo: C:/Users/pauli/OneDrive/Documents/GitHub/ChineseDebt/pexels-pixabay-47344.jpg
+  # html_document:
+  #   toc: true
+  #   toc_float: true
+  #   
 ---
 
 ```{r setup, include=FALSE}
@@ -28,23 +31,25 @@ knitr::read_chunk('cp.R')
 
 ```
 
-![](C:/Users/pauli/OneDrive/Documents/GitHub/ChineseDebt/pexels-pixabay-47344.jpg){height=25%}
+<!-- ![](C:/Users/pauli/OneDrive/Documents/GitHub/ChineseDebt/pexels-pixabay-47344.jpg) -->
+<!-- {height=25%} -->
 ```{css, echo=FALSE}
 h1, h2, h3 {
   text-align: center;
 }
 ```
 
-## Overview of Report {.tabset}
+## <span style="color:white">Overview of Report</span> {data-background=C:/Users/pauli/OneDrive/Documents/GitHub/ChineseDebt/debt2.jpg data-background-size=cover}
 
-### Description
-This is a brief descriptive report highlighting some finds from a quick analysis of a Kaggle Dataset on Chinese Debt in 50 countries from Africa. There were 1188 observations in the dataset with 7 variables named: "S.no","Project","Year",         "Lender","$ Allocation","Country" and "Invested On". 
 
-The major variable of interest was the Allocation (Debt) amount in dollars.
+
+<span style="color:white">This is a brief descriptive report highlighting some finds from a quick analysis of a Kaggle Dataset on Chinese Debt in 50 countries from Africa. There were 1188 observations in the dataset with 7 variables named: "S.no","Project","Year", "Lender","$ Allocation","Country" and "Invested On".</span> 
+
+<span style="color:white">The major variable of interest was the Allocation (Debt) amount in dollars.</span>
 
 <br>
 
-### **Contents of the Report:**
+## **Contents of the Report:** {.smaller}
 
 - Biggest Lenders(allocation-wise)
 - Frequent Borrowers
@@ -65,7 +70,7 @@ theme_set(theme_minimal())
 pal<-c("#661100", "#882255", "6699CC", "#888888",
        "#332288", "#AA4499", "#44AA99", "#999933",
        "#CC6677", "#DDCC77")
-cda<-read_csv("C:/Users/pauli/Desktop/archive/cd.csv")
+cda<-read_csv("C:/Users/pauli/Desktop/china_debt/cd.csv")
 cda<-cda %>% mutate(Allocation=
 as.numeric(gsubfn('([A-Z]|[\\$,])', 
                   list(B='e+9', M='e+6',"$"="", ","=""),
@@ -75,7 +80,7 @@ as.numeric(gsubfn('([A-Z]|[\\$,])',
 
 <br>
 
-## Biggest Lenders
+## <font size="5">Biggest Lenders</font> {.smaller}
 
 ```{r }
 cda %>% group_by(Lender) %>% summarize(Total=sum(Allocation)) %>% 
@@ -88,7 +93,7 @@ kable(caption = "Table 1: Top 10 Lenders to Africa and Total Loan Amount", col.n
 
 <br>
 
-## Top 10 Frequent Borrowers
+## <font size="5">Top 10 Frequent Borrowers</font> {.smaller}
 
 ```{r }
 cda %>% group_by(Country) %>% summarize(Frequency=n()) %>% 
@@ -100,7 +105,8 @@ kable(caption = "Table 2: Africa's Fequent Borrowers", col.names = c("Rank", "Co
 
 <br>
 
-## The African Countries and Their Total Loan Amounts
+## <font size="5">The African Countries and Their Total Loan Amounts</font> {.smaller}
+
 ```{r }
 cda %>% group_by(Country) %>% summarize(Total=sum(Allocation)) %>% 
   arrange(desc(Total))%>% 
@@ -111,7 +117,8 @@ kable(caption = "Table 3: African Countries and the Total Amount Borrowed", col.
 
 <br>
 
-## Most Invested Sectors
+## <font size="5">Most Invested Sectors</font> {.smaller}
+
 ```{r }
 cda %>% group_by(`Invested On`) %>% summarize(Total=sum(Allocation)) %>% 
   arrange(desc(Total))%>% 
@@ -123,7 +130,8 @@ kable(caption = "Table 4: Sectors and The Amounts Invested",
 
 <br>
 
-## Each Country's Biggest Loan
+## <font size="5">Each Country's Biggest Loan</font>  {.smaller}
+
 ```{r}
 cda %>% arrange(desc(Allocation),Country) %>% 
   select(Project: `Invested On`) %>% 
@@ -133,7 +141,7 @@ kable(caption = "Table 5: Details on the Biggest Loan Per Country")
 
 <br>
 
-## Lending trend over the years
+## <font size="5">Lending trend over the years</font>
 
 ```{r,a}
 
@@ -141,10 +149,12 @@ kable(caption = "Table 5: Details on the Biggest Loan Per Country")
 
 <br>
 
-## Top 5 vs Bottom 5 Borrowers
-The following two charts compares the borrowing patterns of the highest and lowest borrowers in Africa.The colored ribbon shows the 95% confidence interval and the colored line represents the linear regression model.
+## <font size="5">Top 5 vs Bottom 5 Borrowers</font> {.smaller}
 
-Aside the noticeable difference in the amounts usually borrowed, there is a stark contrast in the frequency of borrowing. *(NB: Some outliers were taken out so the highest value on the y-axis does not indicate the highest amount borrowed.)
+<font size="4">Top 5 Borrowers</font>
+
+<font size="4">The following two charts compares the borrowing patterns of the highest and lowest borrowers in Africa.The colored ribbon shows the 95% confidence interval and the colored line represents the linear regression model.</font>
+
 
 ```{r,b}
 
@@ -152,18 +162,26 @@ Aside the noticeable difference in the amounts usually borrowed, there is a star
 
 <br>
 
-## Most Invested vs Least Invested Sector (by the top 3 borrowers)
+## <font size="4">Bottom 5 Borrowers</font>
 
-As shown below, Africa's top 3 borrowers spent the most on **Mining** and the least on the **Environment**. Quite ironic!
+<font size="4">Aside the noticeable difference in the amounts usually borrowed, there is a stark contrast in the frequency of borrowing. *(NB: Some outliers were taken out so the highest value on the y-axis does not indicate the highest amount borrowed.)</font>
+
+```{r,be}
+
+```  
+
+## <font size="5">Most Invested vs Least Invested Sector (by the top 3 borrowers)</font>
+
+<font size="4">As shown below, Africa's top 3 borrowers spent the most on **Mining** and the least on the **Environment**. Quite ironic!</font>
 ```{r,c}
 
 ``` 
 
 <br>
 
-## Spotlight on West Africa
-Here's an overview of how the 16 countries in West Africa fared:
-The first graph gives a sense of the usual borrowed amounts per country, and the 2nd shows the total amount borrowed over the period per country. 
+## <font size="5">Spotlight on West Africa</font>
+<font size="4">Here's an overview of how the 16 countries in West Africa fared:
+The first graph gives a sense of the usual borrowed amounts per country, and the 2nd shows the total amount borrowed over the period per country.</font> 
 
 ```{r,d}
 
@@ -171,9 +189,9 @@ The first graph gives a sense of the usual borrowed amounts per country, and the
 
 <br>
 
-## Ghana's Tale
+## <font size="5">Ghana's Tale</font>
 
-At the tail of this report, we take a quick peek at Ghana. We look at Ghana's investment patterns and see the sad story of its most invested area.  
+<font size="4">At the tail of this report, we take a quick peek at Ghana. We look at Ghana's investment patterns and see the sad story of its most invested area.</font>  
 
 
 ```{r,e}
@@ -182,4 +200,12 @@ At the tail of this report, we take a quick peek at Ghana. We look at Ghana's in
 
 <br>
 
-**_THANK YOU FOR YOUR TIME!_**
+## Aluta Continua
+
+```{r,f}
+
+```    
+
+<br>
+
+## <span style="color:maroon">**_THANK YOU FOR YOUR TIME!_**</span> {data-background=C:/Users/pauli/OneDrive/Documents/GitHub/ChineseDebt/debt1.jpg data-background-size=cover}
